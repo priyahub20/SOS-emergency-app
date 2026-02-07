@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SOS Emergency Alert App</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background-color: #f9fafb;
+      color: #1d3557;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    header {
+      background-color: #e63946;
+      color: white;
+      text-align: center;
+      padding: 15px 10px;
+      font-size: 1.4em;
+      font-weight: 600;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+    }
+
+    main {
+      flex: 1;
+      margin-top: 70px;
+      padding: 20px;
+      overflow-y: auto;
+      transition: all 0.4s ease-in-out;
+    }
+
+    section {
+      display: none;
+      animation: fade 0.4s ease;
+    }
+
+    section.active {
+      display: block;
+    }
+
+    @keyframes fade {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      text-align: center;
+      color: #1d3557;
+      font-size: 1.3em;
+      margin-bottom: 10px;
+    }
+
+    p {
+      text-align: center;
+      color: #555;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      display: block;
+      width: 100%;
+      background-color: #e63946;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.1em;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #c62828;
+    }
+
+    iframe {
+      width: 100%;
+      height: 250px;
+      border: none;
+      border-radius: 10px;
+      margin-top: 15px;
+    }
+
+    .status-box {
+      margin-top: 20px;
+      padding: 12px;
+      border-radius: 10px;
+      background-color: #f1faee;
+      font-size: 1.05em;
+      color: #1d3557;
+      display: none;
+      border-left: 5px solid #457b9d;
+    }
+
+    /* Floating SOS button */
+    .floating-btn {
+      position: fixed;
+      bottom: 80px;
+      right: 25px;
+      background-color: #e63946;
+      color: white;
+      font-size: 1.5em;
+      width: 65px;
+      height: 65px;
+      border: none;
+      border-radius: 50%;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      cursor: pointer;
+      transition: 0.3s;
+      z-index: 20;
+    }
+
+    .floating-btn:hover {
+      background-color: #b71c1c;
+      transform: scale(1.1);
+    }
+
+    /* Bottom navigation bar */
+    nav {
+      display: flex;
+      justify-content: space-around;
+      background: #f1faee;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 10px 0;
+      box-shadow: 0 -3px 8px rgba(0, 0, 0, 0.1);
+      z-index: 15;
+    }
+
+    nav button {
+      background: none;
+      border: none;
+      font-size: 1em;
+      color: #1d3557;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    nav button.active {
+      color: #e63946;
+      font-weight: 600;
+    }
+
+    nav button span {
+      font-size: 0.8em;
+    }
+
+    /* Contact page form */
+    .form-group {
+      margin: 15px 0;
+    }
+
+    label {
+      font-weight: 500;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1em;
+      transition: 0.3s;
+    }
+
+    input:focus {
+      border-color: #e63946;
+      outline: none;
+    }
+
+    footer {
+      font-size: 0.85em;
+      color: #777;
+      text-align: center;
+      padding: 15px 0;
+      margin-bottom: 60px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>🚨 SOS Emergency App</header>
+
+  <main>
+    <!-- Home -->
+    <section id="home" class="active">
+      <h2>Quick Help When You Need It</h2>
+      <p>Tap the red SOS button to send an alert to your emergency contacts.</p>
+      <iframe 
+        src="https://www.google.com/maps?q=13.0827,80.2707&hl=es;z=14&output=embed">
+      </iframe>
+      <div id="status" class="status-box"></div>
+    </section>
+
+    <div id="home" class="page active">
+  <h2>🚨 SOS Emergency</h2>
+  <button id="sosBtn">SEND SOS</button>
+</div>
+
+<div id="contacts" class="page">
+  <h2>📞 Emergency Contacts</h2>
+  <p>Police: 100</p>
+  <p>Ambulance: 108</p>
+</div>
+
+<div id="about" class="page">
+  <h2>ℹ️ About</h2>
+  <p>This SOS app sends emergency alerts with live location.</p>
+</div>
+
+    <!-- Contacts -->
+    <section id="contacts">
+      <h2>Emergency Contacts</h2>
+      <p>Save the contact numbers of people you trust.</p>
+
+      <div class="form-group">
+        <label for="name1">Contact Name</label>
+        <input type="text" id="name1" placeholder="Enter name">
+      </div>
+
+      <div class="form-group">
+        <label for="phone1">Contact Number</label>
+        <input type="tel" id="phone1" placeholder="Enter phone number">
+      </div>
+
+      <div class="form-group">
+        <label for="name2">Contact Name</label>
+        <input type="text" id="name2" placeholder="Enter name">
+      </div>
+
+      <div class="form-group">
+        <label for="phone2">Contact Number</label>
+        <input type="tel" id="phone2" placeholder="Enter phone number">
+      </div>
+
+      <button class="btn" onclick="saveContacts()">💾 Save Contacts</button>
+    </section>
+
+    <!-- About -->
+    <section id="about">
+      <h2>About This App</h2>
+      <p>This SOS Emergency App is designed to provide quick help during critical situations. It can send alerts with your real-time location to saved emergency contacts.</p>
+      <p>Developed as part of a Data Analytics & Security initiative to improve real-time communication and personal safety.</p>
+    </section>
+  </main>
+
+  <!-- Floating SOS button -->
+  <button class="floating-btn" onclick="sendSOS()">🚨</button>
+
+  <!-- Bottom navigation -->
+  <nav>
+    <button id="navHome" class="active" onclick="showPage('home')">🏠 <span>Home</span></button>
+    <button id="navContacts" onclick="showPage('contacts')">📞 <span>Contacts</span></button>
+    <button id="navAbout" onclick="showPage('about')">ℹ️ <span>About</span></button>
+  </nav>
+
+  <footer>© 2025 SOS Emergency | Created by [Your Name]</footer>
+
+  <script>
+    let savedContacts = [];
+
+    function showPage(page) {
+      document.querySelectorAll("section").forEach(sec => sec.classList.remove("active"));
+      document.getElementById(page).classList.add("active");
+      document.querySelectorAll("nav button").forEach(btn => btn.classList.remove("active"));
+      document.getElementById("nav" + page.charAt(0).toUpperCase() + page.slice(1)).classList.add("active");
+    }
+
+    function sendSOS() {
+      const status = document.getElementById("status");
+      status.style.display = "block";
+      status.innerHTML = `
+        <strong>📍 Location:</strong> 13.0827° N, 80.2707° E<br>
+        <strong>🚨 Alert Status:</strong> SOS sent to emergency contacts.<br>
+        <strong>📞 Contacts:</strong> ${savedContacts.length > 0 ? savedContacts.join(", ") : "No contacts saved"}
+      `;
+      alert("✅ SOS Alert sent successfully!");
+    }
+
+    function saveContacts() {
+      const name1 = document.getElementById('name1').value;
+      const phone1 = document.getElementById('phone1').value;
+      const name2 = document.getElementById('name2').value;
+      const phone2 = document.getElementById('phone2').value;
+
+      savedContacts = [];
+      if (name1 && phone1) savedContacts.push(`${name1} (${phone1})`);
+      if (name2 && phone2) savedContacts.push(`${name2} (${phone2})`);
+
+      alert("📞 Contacts saved successfully!");
+      showPage('home');
+    }
+  </script>
+</body>
+</html>
